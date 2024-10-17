@@ -1,0 +1,3 @@
+# Vendor Files
+vendor/*
+composer.lock
