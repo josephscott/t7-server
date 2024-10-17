@@ -1,0 +1,23 @@
+{
+	"name": "t7/server",
+	"license": "MIT",
+	"require": {
+		"php": ">=8.3",
+		"nikic/fast-route": "^1.3.0"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.64",
+		""josephscott/phpcsfixer-config": "^0.0.2",
+		"phpstan/phpstan": "^1.12"
+	},
+	"autoload": {
+		"classmap": [
+			"src/t7/server.php"
+		]
+	},
+	"config": {
+		"classmap-authoritative": true,
+		"optimize-autoloader": true,
+		"allow-plugins": false
+	}
+}
