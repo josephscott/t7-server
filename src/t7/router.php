@@ -9,33 +9,25 @@ use function is_string;
 use function substr;
 
 class Router {
-	private string $handler;
-	private array $get;
+	public function __construct() {}
 
-	public function __construct(
-		string $handler,
-		array $get
-	) {
-		$this->handler = $handler;
-		$this->get = $get;
-	}
+	public static function run( string|callable $handler, array $vars ) {
+		if ( \is_callable( $handler ) ) {
+			$handler( $vars );
+		}
 
-	public function run() {
-		$call_file = function( string $__file, array $get ) {
+		$call_file = function ( string $__file, array $vars ) {
 			require $__file;
 		};
 
-/*
-		if ( is_callable( $this->handler ) ) {
-			return $handler( $this->get );
-		}
- */
 		if (
-			is_string( $this->handler )
-			&& substr( $this->handler, 0, 1 ) === '/'
-			&& is_readable( $this->handler )
+			\is_string( $handler )
+			&& substr( $handler, 0, 1 ) === '/'
+			&& is_readable( $handler )
 		) {
-			$call_file( $this->handler, $this->get );
+			$call_file( $handler, $vars );
 		}
+
+		exit();
 	}
 }

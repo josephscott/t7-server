@@ -3,7 +3,11 @@ declare( strict_types = 1 );
 
 namespace T7;
 
+use function error_log;
 use function header;
+use function is_callable;
+use function is_readable;
+use function is_string;
 use function rawurldecode;
 use function rtrim;
 use function strpos;
@@ -51,18 +55,26 @@ class Server {
 		// [2] - route vars
 		switch ( $route_info[0] ) {
 			case \FastRoute\Dispatcher::NOT_FOUND:
-				// Redirect trailing slashes
-				if ( substr( $uri, -1 ) === '/' ) {
-					header( 'Location: ' . rtrim( $uri, '/' ), true, 301 );
+				// Redirect no trailing slashes
+				if ( substr( $uri, -1 ) !== '/' ) {
+					$qs = '';
+					if ( ! empty( $_SERVER['QUERY_STRING'] ) ) {
+						$qs = '?' . $_SERVER['QUERY_STRING'];
+					}
+					header( 'Location: ' . $uri . '/' . $qs, true, 301 );
 					exit();
 				}
+				// Do 404
 				break;
 			case \FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+				error_log( "T7\Server: method not allowed, $http_method" );
 				$allowed_methods = $route_info[1];
 				break;
 			case \FastRoute\Dispatcher::FOUND:
-				$handler = $route_info[1];
-				$vars = $route_info[2];
+				$router = Router::run(
+					handler: $route_info[1],
+					vars: $route_info[2]
+				);
 				break;
 		}
 	}
