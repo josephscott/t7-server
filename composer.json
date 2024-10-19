@@ -12,7 +12,8 @@
 	},
 	"autoload": {
 		"classmap": [
-			"src/t7/server.php"
+			"src/t7/server.php",
+			"src/t7/router.php"
 		]
 	},
 	"config": {
